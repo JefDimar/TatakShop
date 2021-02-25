@@ -28,6 +28,11 @@ export default new Vuex.Store({
     },
     delete_cart (state, id) {
       state.carts = state.carts.filter(element => element.id !== id)
+    },
+    update_cart (state, data) {
+      const index = state.carts.findIndex(index => index.id === data.id)
+      const slice = state.carts.slice(index)
+      console.log(slice)
     }
   },
   actions: {
@@ -141,8 +146,30 @@ export default new Vuex.Store({
           console.log(response)
         })
     },
-    UPDATE_QTY (context, id, qty) {
-      console.log(id, qty)
+    UPDATE_QTY (context, data) {
+      axios({
+        url: `/carts/${data.id}`,
+        method: 'PUT',
+        headers: {
+          access_token: localStorage.access_token
+        },
+        data: {
+          quantity: data.qty
+        }
+      })
+        .then(({ data }) => {
+          console.log(data[0])
+          context.commit('update_cart', data[0])
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            title: 'Unauthorized!',
+            text: response.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 4000
+          })
+        })
     },
     DELETE_CART (context, id) {
       axios({
