@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '../api/axios'
+// import router from '../router'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,6 @@ export default new Vuex.Store({
     FETCH_PRODUCTS (context) {
       axios.get('/products')
         .then(({ data }) => {
-          console.log(data)
           context.commit('fetchProducts', data)
         })
         .catch(({ response }) => {
