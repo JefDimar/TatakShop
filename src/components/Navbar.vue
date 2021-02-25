@@ -14,8 +14,8 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#" @click.prevent="login">Login</b-nav-item>
-          <b-nav-item href="#" @click.prevent="register">Register</b-nav-item>
+          <b-nav-item href="#" @click.prevent="login" v-if="!isLoggedIn">Login</b-nav-item>
+          <b-nav-item href="#" @click.prevent="register" v-if="!isLoggedIn">Register</b-nav-item>
           <b-nav-item-dropdown right v-if="isLoggedIn">
             <!-- Using 'button-content' slot -->
             <template #button-content>

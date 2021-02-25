@@ -20,7 +20,7 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'login',
+    name: 'Login',
     component: Login
   },
   {
@@ -36,6 +36,17 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {})
+router.beforeEach((to, from, next) => {
+  const auth = localStorage.access_token
+  if (to.name === 'Cart' && !auth) {
+    next({ name: 'Login' })
+  } else if (to.name === 'Login' && auth) {
+    next({ name: 'Home' })
+  } else if (to.name === 'Register' && auth) {
+    next({ name: 'Home' })
+  } else {
+    next()
+  }
+})
 
 export default router

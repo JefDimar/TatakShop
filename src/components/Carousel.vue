@@ -3,7 +3,7 @@
   <div>
     <b-carousel
       id="carousel-1"
-      class="mb-5"
+      class="mb-5 mt-5"
       v-model="slide"
       :interval="4000"
       controls
