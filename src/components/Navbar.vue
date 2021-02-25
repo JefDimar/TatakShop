@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Navbar -->
-    <b-navbar toggleable="lg" type="dark" variant="dark">
+    <b-navbar toggleable="lg" type="dark" variant="dark" fixed="top">
       <b-navbar-brand>Tatak Shop</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -46,7 +46,8 @@ export default {
       this.$router.push('/register')
     },
     logout () {
-      localStorage.access_token.clear()
+      localStorage.clear()
+      this.$store.commit('set_isloggedin', false)
     }
   },
   computed: {
@@ -60,6 +61,9 @@ export default {
   created () {
     if (localStorage.access_token) {
       this.$store.commit('set_isloggedin', true)
+      this.$store.commit('set_user', localStorage.user)
+    } else {
+      this.$store.commit('set_isloggedin', false)
     }
   }
 }

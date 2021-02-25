@@ -44,6 +44,7 @@ export default new Vuex.Store({
       })
         .then(({ data }) => {
           localStorage.access_token = data.access_token
+          localStorage.user = data.user
           Swal.fire({
             text: data.message,
             icon: 'success',
@@ -82,6 +83,32 @@ export default new Vuex.Store({
             timer: 5000
           })
           router.push('/login')
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            title: 'Unauthorized!',
+            text: response.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 5000
+          })
+        })
+    },
+    ADD_CART (context, id) {
+      axios({
+        url: `/carts/${id}`,
+        method: 'POST',
+        data: {
+          quantity: 1
+        },
+        headers: {
+          access_token: localStorage.access_token
+        }
+      })
+        .then(({ data }) => {
+          console.log(data)
+          // kalo pertama kali dia object, kalo ngulang dia array
+          // kasih kondisi jika array
         })
         .catch(({ response }) => {
           Swal.fire({

@@ -22,7 +22,8 @@
         </b-card-text>
         <template #footer>
           <b-button
-            variant="warning">
+            variant="warning"
+            @click.prevent="addToCart(product.id)">
             Add to cart
           </b-button>
         </template>
@@ -33,17 +34,28 @@
 
 <script>
 import Carousel from '../components/Carousel'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Home',
   components: {
     Carousel
   },
-  data () {
-    return {
-    }
-  },
   methods: {
+    addToCart (id) {
+      if (!localStorage.access_token) {
+        Swal.fire({
+          title: 'Please login first',
+          text: 'You are not login yet!',
+          icon: 'warning',
+          showConfirmButton: false,
+          timer: 4000
+        })
+        this.$router.push('/login')
+      } else {
+        this.$store.dispatch('ADD_CART', id)
+      }
+    }
   },
   computed: {
     products () {
