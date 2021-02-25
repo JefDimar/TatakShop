@@ -28,11 +28,6 @@ export default new Vuex.Store({
     },
     delete_cart (state, id) {
       state.carts = state.carts.filter(element => element.id !== id)
-    },
-    update_cart (state, data) {
-      const index = state.carts.findIndex(index => index.id === data.id)
-      const slice = state.carts.slice(index)
-      console.log(slice)
     }
   },
   actions: {
@@ -117,8 +112,13 @@ export default new Vuex.Store({
           access_token: localStorage.access_token
         }
       })
-        .then(({ data }) => {
-          console.log(data)
+        .then(_ => {
+          Swal.fire({
+            title: 'Success Add Product',
+            icon: 'success',
+            timer: 4000,
+            showConfirmButton: false
+          })
           // kalo pertama kali add dia object, kalo ngulang add dia array
           // kasih kondisi jika array
         })
@@ -158,8 +158,7 @@ export default new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          console.log(data[0])
-          context.commit('update_cart', data[0])
+          context.dispatch('FETCH_CART')
         })
         .catch(({ response }) => {
           Swal.fire({
@@ -172,32 +171,44 @@ export default new Vuex.Store({
         })
     },
     DELETE_CART (context, id) {
-      axios({
-        url: `/carts/${id}`,
-        method: 'DELETE',
-        headers: {
-          access_token: localStorage.access_token
+      Swal.fire({
+        title: 'Do you really want to delete this product?',
+        icon: 'warning',
+        showDenyButton: true,
+        confirmButtonText: 'Confirm',
+        denyButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios({
+            url: `/carts/${id}`,
+            method: 'DELETE',
+            headers: {
+              access_token: localStorage.access_token
+            }
+          })
+            .then(({ data }) => {
+              Swal.fire({
+                title: 'Success',
+                text: data.message,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 4000
+              })
+              context.commit('delete_cart', id)
+            })
+            .catch(({ response }) => {
+              Swal.fire({
+                title: 'Unauthorized!',
+                text: response.data.message,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 4000
+              })
+            })
+        } else if (result.isDenied) {
+          Swal.fire('Product not deleted', '', 'info')
         }
       })
-        .then(({ data }) => {
-          Swal.fire({
-            title: 'Success',
-            text: data.message,
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 4000
-          })
-          context.commit('delete_cart', id)
-        })
-        .catch(({ response }) => {
-          Swal.fire({
-            title: 'Unauthorized!',
-            text: response.data.message,
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 4000
-          })
-        })
     }
   },
   modules: {

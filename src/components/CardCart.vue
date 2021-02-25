@@ -70,6 +70,7 @@ export default {
         })
       } else {
         this.$store.dispatch('UPDATE_QTY', data)
+        this.qty = 0
       }
     },
     deleteCart (id) {
