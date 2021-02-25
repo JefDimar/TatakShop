@@ -10,7 +10,8 @@ export default new Vuex.Store({
   state: {
     isLoggedIn: false,
     user: '',
-    products: []
+    products: [],
+    carts: []
   },
   mutations: {
     fetchProducts (state, data) {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
     },
     set_user (state, data) {
       state.user = data
+    },
+    fetchCart (state, data) {
+      state.carts = data
     }
   },
   actions: {
@@ -118,6 +122,20 @@ export default new Vuex.Store({
             showConfirmButton: false,
             timer: 5000
           })
+        })
+    },
+    FETCH_CART (context) {
+      axios({
+        url: '/carts',
+        headers: {
+          access_token: localStorage.access_token
+        }
+      })
+        .then(({ data }) => {
+          context.commit('fetchCart', data)
+        })
+        .catch(({ response }) => {
+          console.log(response)
         })
     }
   },

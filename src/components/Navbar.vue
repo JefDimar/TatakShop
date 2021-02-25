@@ -9,7 +9,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item href="#" @click.prevent="home">Home</b-nav-item>
-          <b-nav-item href="#" @click.prevent="cart">Shopping Cart</b-nav-item>
+          <b-nav-item href="#" v-if="isLoggedIn" @click.prevent="cart">Shopping Cart</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
