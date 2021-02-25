@@ -25,6 +25,9 @@ export default new Vuex.Store({
     },
     fetchCart (state, data) {
       state.carts = data
+    },
+    delete_cart (state, id) {
+      state.carts = state.carts.filter(element => element.id !== id)
     }
   },
   actions: {
@@ -111,7 +114,7 @@ export default new Vuex.Store({
       })
         .then(({ data }) => {
           console.log(data)
-          // kalo pertama kali dia object, kalo ngulang dia array
+          // kalo pertama kali add dia object, kalo ngulang add dia array
           // kasih kondisi jika array
         })
         .catch(({ response }) => {
@@ -136,6 +139,37 @@ export default new Vuex.Store({
         })
         .catch(({ response }) => {
           console.log(response)
+        })
+    },
+    UPDATE_QTY (context, id, qty) {
+      console.log(id, qty)
+    },
+    DELETE_CART (context, id) {
+      axios({
+        url: `/carts/${id}`,
+        method: 'DELETE',
+        headers: {
+          access_token: localStorage.access_token
+        }
+      })
+        .then(({ data }) => {
+          Swal.fire({
+            title: 'Success',
+            text: data.message,
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 4000
+          })
+          context.commit('delete_cart', id)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            title: 'Unauthorized!',
+            text: response.data.message,
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 4000
+          })
         })
     }
   },
