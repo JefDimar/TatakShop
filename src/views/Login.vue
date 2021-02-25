@@ -28,7 +28,7 @@
 
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
-        <b-button type="button" variant="success">Don't Have Account?</b-button>
+        <b-button type="button" variant="success" @click.prevent="toRegister">Don't Have Account?</b-button>
       </b-form>
     </b-card>
   </div>
@@ -47,16 +47,20 @@ export default {
   },
   methods: {
     onSubmit () {
-      // const input = {
-      //   email: this.form.email,
-      //   password: this.form.password
-      // }
+      const input = {
+        email: this.form.email,
+        password: this.form.password
+      }
+      this.$store.dispatch('LOGIN', input)
       this.form.email = ''
       this.form.password = ''
     },
     onReset () {
       this.form.email = ''
       this.form.password = ''
+    },
+    toRegister () {
+      this.$router.push('/register')
     }
   }
 }

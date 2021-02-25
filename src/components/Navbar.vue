@@ -16,10 +16,10 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item href="#" @click.prevent="login">Login</b-nav-item>
           <b-nav-item href="#" @click.prevent="register">Register</b-nav-item>
-          <b-nav-item-dropdown right>
+          <b-nav-item-dropdown right v-if="isLoggedIn">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <em>User</em>
+              <em v-text="user"></em>
             </template>
             <b-dropdown-item href="#" @click.prevent="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -47,6 +47,19 @@ export default {
     },
     logout () {
       localStorage.access_token.clear()
+    }
+  },
+  computed: {
+    isLoggedIn () {
+      return this.$store.state.isLoggedIn
+    },
+    user () {
+      return this.$store.state.user
+    }
+  },
+  created () {
+    if (localStorage.access_token) {
+      this.$store.commit('set_isloggedin', true)
     }
   }
 }
